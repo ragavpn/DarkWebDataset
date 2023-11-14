@@ -24,7 +24,6 @@ def AccessDatabase():
 
     new_list = [[value[0][2:], value[1]] for key, value in sorted_data]
 
-    categories = ["Armory", "Crypto", "Drugs", "Electronics", "Financial", "Gambling", "Hacking", "Pornography", "Violence", "Legal"]
     new_data_structure = []
 
     for item in new_list:
@@ -93,6 +92,7 @@ class TupleDataset(Dataset):
         data = torch.nn.functional.softmax(torch.tensor(data), dim=0)
         return data
 
+categories = ["Armory", "Crypto", "Drugs", "Electronics", "Financial", "Gambling", "Hacking", "Pornography", "Violence", "Legal"]
 
 new_data_structure = AccessDatabase()
 
@@ -132,39 +132,69 @@ else:
     model.fc = nn.Linear(num_ftrs, 10)
 
 
-# Define the loss function and optimizer
-criterion = nn.MSELoss()
-# criterion = criterion.to(device)
-optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+# # Define the loss function and optimizer
+# criterion = nn.MSELoss()
+# # criterion = criterion.to(device)
+# optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-# Create an iterator for the tuple_dataloader
-tuple_dataloader_iter = iter(tuple_dataloader)
+# # Create an iterator for the tuple_dataloader
+# tuple_dataloader_iter = iter(tuple_dataloader)
 
-# Train the model
-for epoch in range(10):
-    for i, (images, labels) in enumerate(zip(image_dataloader, tuple_dataloader_iter)):  
+# # Train the model
+# for epoch in range(10):
+#     for i, (images, labels) in enumerate(zip(image_dataloader, tuple_dataloader_iter)):  
 
-        # Zero the parameter gradients
-        optimizer.zero_grad()
+#         # Zero the parameter gradients
+#         optimizer.zero_grad()
 
-        # Forward pass
-        outputs = model(images)
+#         # Forward pass
+#         outputs = model(images)
 
-        # Calculate the loss
-        loss = criterion(outputs, labels)
+#         # Calculate the loss
+#         loss = criterion(outputs, labels)
 
-        # Backward pass and optimization
-        loss.backward()
-        optimizer.step()
+#         # Backward pass and optimization
+#         loss.backward()
+#         optimizer.step()
 
-        # Print statistics
-        print(f"Epoch: {i+1}, Loss: {loss.item():.4f}")
+#         # Print statistics
+#         print(f"Epoch: {i+1}, Loss: {loss.item():.4f}")
 
 
-print('Finished Training')
+# print('Finished Training')
 
-# Save the model
-torch.save(model, model_path)
+# # Save the model
+# torch.save(model, model_path)
+
+# Define the path to the 'test' subfolder
+test_folder_path = 'test'
+
+# Get a list of all files in the 'test' subfolder
+test_files = os.listdir(test_folder_path)
+
+# Iterate over the list 'test_files'
+for filename in test_files:
+    # Define the path to the image
+    img_path = os.path.join(test_folder_path, filename)
+
+    # Open the image
+    image = Image.open(img_path).convert('RGB')
+
+    # Apply the transformations needed
+    image = transform(image)
+
+    # Add an extra batch dimension since pytorch treats all images as batches
+    image = image.unsqueeze(0)
+
+    # Make a prediction
+    outputs = model(image)
+    outputs = outputs.tolist()[0]
+    outputs = [round(i*100, 2) for i in outputs]
+
+    out = dict(zip(categories, outputs))
+
+    # Print the predictions
+    print(f"{filename} - {out}")
 
 
 
