@@ -37,7 +37,7 @@ def AccessDatabase():
 
 def CreatePicFolder(new_data_structure):
     # Define the path to the 'pic' subfolder
-    pic_folder_path = r'C:\Users\Ragav\Desktop\Prophecy\COLLEGE\CLUBs\SPIDER\NOCAINE\Dataset\pic'
+    pic_folder_path = 'pic'
 
     # Get a list of all files in the 'pic' subfolder
     pic_files = os.listdir(pic_folder_path)
