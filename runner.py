@@ -132,39 +132,39 @@ else:
     model.fc = nn.Linear(num_ftrs, 10)
 
 
-# # Define the loss function and optimizer
-# criterion = nn.MSELoss()
-# # criterion = criterion.to(device)
-# optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+# Define the loss function and optimizer
+criterion = nn.MSELoss()
+# criterion = criterion.to(device)
+optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-# # Create an iterator for the tuple_dataloader
-# tuple_dataloader_iter = iter(tuple_dataloader)
+# Create an iterator for the tuple_dataloader
+tuple_dataloader_iter = iter(tuple_dataloader)
 
-# # Train the model
-# for epoch in range(10):
-#     for i, (images, labels) in enumerate(zip(image_dataloader, tuple_dataloader_iter)):  
+# Train the model
+for epoch in range(10):
+    for i, (images, labels) in enumerate(zip(image_dataloader, tuple_dataloader_iter)):  
 
-#         # Zero the parameter gradients
-#         optimizer.zero_grad()
+        # Zero the parameter gradients
+        optimizer.zero_grad()
 
-#         # Forward pass
-#         outputs = model(images)
+        # Forward pass
+        outputs = model(images)
 
-#         # Calculate the loss
-#         loss = criterion(outputs, labels)
+        # Calculate the loss
+        loss = criterion(outputs, labels)
 
-#         # Backward pass and optimization
-#         loss.backward()
-#         optimizer.step()
+        # Backward pass and optimization
+        loss.backward()
+        optimizer.step()
 
-#         # Print statistics
-#         print(f"Epoch: {i+1}, Loss: {loss.item():.4f}")
+        # Print statistics
+        print(f"Epoch: {i+1}, Loss: {loss.item():.4f}")
 
 
-# print('Finished Training')
+print('Finished Training')
 
-# # Save the model
-# torch.save(model, model_path)
+# Save the model
+torch.save(model, model_path)
 
 # Define the path to the 'test' subfolder
 test_folder_path = 'test'
